@@ -1,8 +1,10 @@
 package org.info.blog.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.info.blog.models.Post;
 import org.info.blog.service.PostService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +18,10 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("{authorId}/")
-    public ResponseEntity<Post> createPost(@PathVariable long authorId, @RequestBody Post post) {
-        return postService.createPost(authorId, post);
+    @PostMapping()
+    public ResponseEntity<Post> createPost(@NonNull HttpServletRequest request, @RequestBody Post post) {
+
+        return postService.createPost(request, post);
 
     }
 

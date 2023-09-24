@@ -1,6 +1,10 @@
 package org.info.blog.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.info.blog.config.JwtService;
 import org.info.blog.models.Post;
+import org.info.blog.models.User;
 import org.info.blog.repository.PostRepository;
 import org.info.blog.repository.UsersRepository;
 import org.springframework.http.HttpStatus;
@@ -11,23 +15,25 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
     private final UsersRepository usersRepository;
+    private final JwtService jwtService;
 
-    public PostService(PostRepository postRepository, UsersRepository usersRepository) {
-        this.postRepository = postRepository;
-        this.usersRepository = usersRepository;
-    }
 
-    public ResponseEntity<Post> createPost(long autherId, Post post) {
-        if (!usersRepository.existsById(autherId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Post> createPost(HttpServletRequest request, Post post) {
+
+
+        String email = jwtService.extractUsername(request.getHeader("Authorization").substring(7));
+
+        User author = usersRepository.findByEmail(email).orElseThrow();
+
+
         if (post.getBody() == null || post.getTitle() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        post.setAuthor(usersRepository.findById(autherId).orElseThrow());
+        post.setAuthor(author);
         post.setDate(new Timestamp(System.currentTimeMillis()));
 
         return new ResponseEntity<>(postRepository.saveAndFlush(post), HttpStatus.CREATED);

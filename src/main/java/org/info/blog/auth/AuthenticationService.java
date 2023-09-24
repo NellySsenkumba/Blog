@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.info.blog.config.JwtService;
 import org.info.blog.dto.CreateUserDto;
 import org.info.blog.dto.LoginDto;
+import org.info.blog.exceptions.UserExistsException;
 import org.info.blog.models.Role;
 import org.info.blog.models.User;
 import org.info.blog.repository.UsersRepository;
@@ -29,7 +30,11 @@ public class AuthenticationService {
     private final UserDetailsService userDetailsService;
 
     public AuthenticationResponse register(CreateUserDto request) {
-        var user = User.builder()
+        if (repository.existsByEmail(request.email())) {
+            throw new UserExistsException();
+        }
+
+        User user = User.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
                 .email(request.email())
