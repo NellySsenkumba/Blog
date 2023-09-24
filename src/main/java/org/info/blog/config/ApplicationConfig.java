@@ -19,6 +19,7 @@ public class ApplicationConfig {
 
     private final UsersRepository usersRepository;
 
+
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> usersRepository.findByEmail(username)
@@ -26,8 +27,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authProvider= new DaoAuthenticationProvider();
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;

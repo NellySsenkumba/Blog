@@ -28,7 +28,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     Role role;
 
-    private String middleName;
+//    private String middleName;
 
     @Column(nullable = false)
     private String firstName;
@@ -37,27 +37,37 @@ public class User implements UserDetails {
     private String lastName;
 
 
-    @Column(unique = true,nullable = false)
-    private String username;
+//    @Column(unique = true,nullable = false)
+//    private String username;
 
     @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false)
-    private Date dateOfBirth;
+//
+//    @Column(nullable = false)
+//    private Date dateOfBirth;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(
-            nullable = false,
-            updatable = false
-    )
-    private Timestamp dateCreated;
+//    @Column(
+//            nullable = false,
+//            updatable = false
+//    )
+//    private Timestamp dateCreated;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getEmail();
+    }
+
+
+    public void setUsername(String username) {
+         this.setEmail(username);
     }
 
     @Override
