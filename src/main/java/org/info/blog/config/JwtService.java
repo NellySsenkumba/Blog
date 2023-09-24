@@ -42,7 +42,7 @@ public class JwtService {
                 .builder()
                 .setClaims(extraClaims)
 //                .claim("authorities",userDetails.getAuthorities())
-//                .claim("test","my own claim")
+                .claim("test","my own claim")
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(3)))
@@ -55,7 +55,7 @@ public class JwtService {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
-    
+
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());

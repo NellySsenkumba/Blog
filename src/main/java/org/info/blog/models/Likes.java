@@ -16,5 +16,7 @@ public class Likes {
     private User user;
 
     //post
+    @ManyToOne(optional = false)
+    private Post post;
 
 }

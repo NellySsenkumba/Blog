@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -28,7 +29,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     Role role;
 
-//    private String middleName;
+    private String middleName;
 
     @Column(nullable = false)
     private String firstName;
@@ -42,18 +43,23 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String password;
-//
-//    @Column(nullable = false)
-//    private Date dateOfBirth;
+
+    @Column(nullable = false)
+    private Date dateOfBirth;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-//    @Column(
-//            nullable = false,
-//            updatable = false
-//    )
-//    private Timestamp dateCreated;
+    @Column(
+            nullable = false,
+            updatable = false
+    )
+    private Timestamp dateCreated;
+
+
+
+    @OneToMany(mappedBy = "author")
+    Set<Post> posts;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

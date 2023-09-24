@@ -1,6 +1,8 @@
 package org.info.blog.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.info.blog.dto.CreateUserDto;
+import org.info.blog.dto.LoginDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,14 +17,14 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
+            @RequestBody CreateUserDto request
     ) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody AuthenticationRequest request
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(
+            @RequestBody LoginDto request
     ) {
 
         return ResponseEntity.ok(authenticationService.authenticate(request));

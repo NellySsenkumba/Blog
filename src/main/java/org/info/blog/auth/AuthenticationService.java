@@ -2,6 +2,8 @@ package org.info.blog.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.info.blog.config.JwtService;
+import org.info.blog.dto.CreateUserDto;
+import org.info.blog.dto.LoginDto;
 import org.info.blog.models.Role;
 import org.info.blog.models.User;
 import org.info.blog.repository.UsersRepository;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
 
 @Service
 @RequiredArgsConstructor
@@ -24,30 +28,41 @@ public class AuthenticationService {
 
     private final UserDetailsService userDetailsService;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(CreateUserDto request) {
         var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .firstName(request.firstName())
+                .lastName(request.lastName())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .dateOfBirth(request.dateOfBirth())
+                .middleName(request.middleName())
                 .role(Role.USER)
+                .dateCreated(new Timestamp(System.currentTimeMillis()))
                 .build();
         repository.save(user);
+
+
         String jwtToken = jwtService.generateToken(user);
+
+        //        getting a claim from the token
+        Object claims = jwtService.extractClaim(jwtToken, claims1 -> claims1.get("test"));
+
+
+        System.out.println(claims);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(LoginDto request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
+                        request.email(),
+                        request.password()
                 )
         );
 
-        UserDetails user = userDetailsService.loadUserByUsername(request.getEmail());
+        UserDetails user = userDetailsService.loadUserByUsername(request.email());
 
 
         var jwtToken = jwtService.generateToken(user);

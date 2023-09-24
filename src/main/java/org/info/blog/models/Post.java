@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -39,13 +40,11 @@ public class Post {
     )
     private List<Category> category;
 
-    @OneToMany
-    @JoinTable(
-            name = "post_likes",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "likes_id")
-    )
+    @OneToMany(mappedBy = "post")
     private List<Likes> likes;
+
+    @OneToMany(mappedBy = "post")
+    private Set<Comment> comments;
 
 
 }
