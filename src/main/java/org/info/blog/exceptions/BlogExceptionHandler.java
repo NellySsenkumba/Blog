@@ -12,6 +12,7 @@ public class BlogExceptionHandler {
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ExceptionResponseDto> expiredJwtToken(ExpiredJwtException expiredJwtException){
-        return new ResponseEntity<>(new ExceptionResponseDto("Token Expired"), HttpStatus.UNAUTHORIZED);
+        var expiryDate=expiredJwtException.getClaims().getExpiration();
+        return new ResponseEntity<>(new ExceptionResponseDto("Token Expired"+expiryDate), HttpStatus.UNAUTHORIZED);
     }
 }

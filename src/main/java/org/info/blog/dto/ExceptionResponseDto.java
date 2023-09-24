@@ -1,2 +1,4 @@
-package org.info.blog.exceptions;public class ExceptionResponseDto {
+package org.info.blog.dto;
+
+public record ExceptionResponseDto (String message){
 }
