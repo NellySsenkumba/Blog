@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
@@ -25,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private static final PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private final UsersRepository usersRepository;
 
@@ -36,7 +35,7 @@ public class ApplicationConfig {
     private static final List<UserDetails> SYSTEM_USERS = Arrays.asList(
             new User(
                     "ssenkumbanelson.sn@gmail.com",
-                     passwordEncoder.encode("123456789"),
+                    passwordEncoder.encode("123456789"),
                     Collections.singleton(new SimpleGrantedAuthority("ADMIN"))
             ),
             new User(
@@ -46,14 +45,16 @@ public class ApplicationConfig {
             )
     );
 
-
+    //def getUsername():
+//    return 1,2
     @Bean
     public UserDetailsService userDetailsService() {
-
         return username ->
                 usersRepository.findByEmail(username)
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
+
 
 
 //    @Bean
@@ -70,8 +71,8 @@ public class ApplicationConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(userDetailsService());//get userdatial
+        authProvider.setPasswordEncoder(passwordEncoder());//encode coming passewro
         return authProvider;
     }
 

@@ -1,5 +1,6 @@
 package org.info.blog.auth;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.info.blog.config.JwtService;
 import org.info.blog.dto.CreateUserDto;
@@ -16,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -44,13 +47,31 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .dateCreated(new Timestamp(System.currentTimeMillis()))
                 .build();
+
+
         repository.save(user);
 
+        HashMap<String, Object> test = new HashMap<>();
 
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(test, user);
 
         //        getting a claim from the token
-        Object claims = jwtService.extractClaim(jwtToken, claims1 -> claims1.get("test"));
+
+        Claims allClaims = jwtService.extractAllClaims(jwtToken);
+        System.out.println("all claims");
+        System.out.println(allClaims);
+        System.out.println("test");
+        System.out.println(allClaims.get("test"));
+        System.out.println(allClaims.get("sub"));
+        Object claims = jwtService.extractClaim(jwtToken, new Function<Claims, Object>() {
+                    @Override
+                    public Object apply(Claims claims1) {
+
+                        return claims1.get("test");
+                    }
+
+                }
+        );
 
 
         System.out.println(claims);

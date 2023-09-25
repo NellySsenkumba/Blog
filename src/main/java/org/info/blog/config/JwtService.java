@@ -24,11 +24,24 @@ public class JwtService {
         return extractClaim(jwtToken, Claims::getSubject);
     }
 
+
     public <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
+        //return hash map {"key"="value"}
+        //map.get("key")
         return claimResolver.apply(claims);
     }
 
+
+
+      public  Claims extractAllClaims(String jwtToken) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(jwtToken)//another issue using parseClaimsJwt(jwtToken)
+                .getBody();
+    }
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
@@ -42,7 +55,7 @@ public class JwtService {
                 .builder()
                 .setClaims(extraClaims)
 //                .claim("authorities",userDetails.getAuthorities())
-                .claim("test","my own claim")
+                .claim("test","Linda Blessing")
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(3)))
@@ -65,17 +78,12 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String jwtToken) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(jwtToken)//another issue using parseClaimsJwt(jwtToken)
-                .getBody();
-    }
+
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
 }

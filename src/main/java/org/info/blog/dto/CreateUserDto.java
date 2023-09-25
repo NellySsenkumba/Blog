@@ -11,5 +11,9 @@ public record CreateUserDto(
         @NonNull Date dateOfBirth,
         @NonNull String email,
         @NonNull String password
+
 ) {
 }
+
+
+//public record recordName(String Post_name, String author){}/getter
