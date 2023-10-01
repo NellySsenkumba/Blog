@@ -21,4 +21,7 @@ public class Category {
     @ManyToMany
     private List<Category> categories;
 
+    @ManyToMany(mappedBy = "category")
+    List<Post> posts;
+
 }

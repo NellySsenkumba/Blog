@@ -24,6 +24,6 @@ public class Comment {
     @OneToOne
     private Comment reply;
 
-    @OneToMany
-    List<Likes> likes;
+    @OneToMany(mappedBy = "comment")
+    List<CommentLikes> likes;
 }

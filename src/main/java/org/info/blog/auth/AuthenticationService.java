@@ -2,6 +2,7 @@ package org.info.blog.auth;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.info.blog.config.ApplicationConfig;
 import org.info.blog.config.JwtService;
 import org.info.blog.dto.CreateUserDto;
 import org.info.blog.dto.LoginDto;
@@ -24,6 +25,9 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+
+    private final User user;
+
     private final UsersRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -37,16 +41,27 @@ public class AuthenticationService {
             throw new UserExistsException();
         }
 
-        User user = User.builder()
-                .firstName(request.firstName())
-                .lastName(request.lastName())
-                .email(request.email())
-                .password(passwordEncoder.encode(request.password()))
-                .dateOfBirth(request.dateOfBirth())
-                .middleName(request.middleName())
-                .role(Role.USER)
-                .dateCreated(new Timestamp(System.currentTimeMillis()))
-                .build();
+        //using builder
+//        User user = User.builder()
+//                .firstName(request.firstName())
+//                .lastName(request.lastName())
+//                .email(request.email())
+//                .password(passwordEncoder.encode(request.password()))
+//                .dateOfBirth(request.dateOfBirth())
+//                .middleName(request.middleName())
+//                .role(Role.USER)
+//                .dateCreated(new Timestamp(System.currentTimeMillis()))
+//                .build();
+
+        // using beans
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
+        user.setEmail(request.email());
+        user.setPassword(passwordEncoder.encode(request.password()));
+
+        user.setDateOfBirth(request.dateOfBirth());
+        user.setMiddleName(request.middleName());
+        user.setRole(Role.valueOf(request.role()));
 
 
         repository.save(user);
@@ -57,12 +72,12 @@ public class AuthenticationService {
 
         //        getting a claim from the token
 
-        Claims allClaims = jwtService.extractAllClaims(jwtToken);
-        System.out.println("all claims");
-        System.out.println(allClaims);
-        System.out.println("test");
-        System.out.println(allClaims.get("test"));
-        System.out.println(allClaims.get("sub"));
+//        Claims allClaims = jwtService.extractAllClaims(jwtToken);
+//        System.out.println("all claims");
+//        System.out.println(allClaims);
+//        System.out.println("test");
+//        System.out.println(allClaims.get("test"));
+//        System.out.println(allClaims.get("sub"));
         Object claims = jwtService.extractClaim(jwtToken, new Function<Claims, Object>() {
                     @Override
                     public Object apply(Claims claims1) {

@@ -1,11 +1,8 @@
 package org.info.blog.controllers;
 
-import org.info.blog.models.Likes;
 import org.info.blog.service.LikesService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/likes/")

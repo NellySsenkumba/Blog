@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -55,8 +56,6 @@ public class ApplicationConfig {
     }
 
 
-
-
 //    @Bean
 //    public UserDetailsService userDetailsService() {
 //        return username ->
@@ -87,5 +86,14 @@ public class ApplicationConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+
+    @Bean
+    public org.info.blog.models.User createUser() {
+        org.info.blog.models.User user = new org.info.blog.models.User();
+        user.setDateCreated(new Timestamp(System.currentTimeMillis()));
+        return user;
+    }
+
 
 }

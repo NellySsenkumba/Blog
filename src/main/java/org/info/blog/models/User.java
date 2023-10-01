@@ -57,20 +57,18 @@ public class User implements UserDetails {
     private Timestamp dateCreated;
 
 
-
     @OneToMany(mappedBy = "author")
     Set<Post> posts;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return role.getAuthorities();
     }
 
     @Override
     public String getUsername() {
         return this.getEmail();
     }
-
 
 
     @Override

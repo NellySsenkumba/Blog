@@ -41,7 +41,7 @@ public class Post {
     private List<Category> category;
 
     @OneToMany(mappedBy = "post")
-    private List<Likes> likes;
+    private List<PostLikes> likes;
 
     @OneToMany(mappedBy = "post")
     private Set<Comment> comments;

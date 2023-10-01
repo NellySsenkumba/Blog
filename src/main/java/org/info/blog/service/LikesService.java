@@ -1,8 +1,7 @@
 package org.info.blog.service;
 
-import org.info.blog.models.Likes;
+import org.info.blog.models.PostLikes;
 import org.info.blog.models.Post;
-import org.info.blog.models.User;
 import org.info.blog.repository.LikesRepository;
 import org.info.blog.repository.PostRepository;
 import org.info.blog.repository.UsersRepository;
@@ -30,16 +29,16 @@ public class LikesService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Post post = postRepository.findById(postId).orElseThrow();
-        List<Likes> likes = post.getLikes();
+        List<PostLikes> likes = post.getLikes();
 
-        for (Likes like : likes) {
+        for (PostLikes like : likes) {
             if (like.getUser().getId() == userId) {
                 post.getLikes().remove(like);
                 likesRepository.delete(like);
                 return new ResponseEntity<>("Post Unliked", HttpStatus.CREATED);
             }
         }
-        Likes like = new Likes();
+        PostLikes like = new PostLikes();
         like.setUser(usersRepository.findById(userId).orElseThrow());
         post.getLikes().add(like);
         likesRepository.save(like);

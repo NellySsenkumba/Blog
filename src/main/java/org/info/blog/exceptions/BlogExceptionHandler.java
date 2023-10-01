@@ -41,8 +41,8 @@ public class BlogExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponseDto> generalException() {
-        return new ResponseEntity<>(new ExceptionResponseDto("General exception"), HttpStatus.EXPECTATION_FAILED);
+    public ResponseEntity<ExceptionResponseDto> generalException(Exception e) {
+        return new ResponseEntity<>(new ExceptionResponseDto("General exception: "+e.getMessage()), HttpStatus.EXPECTATION_FAILED);
     }
 
 

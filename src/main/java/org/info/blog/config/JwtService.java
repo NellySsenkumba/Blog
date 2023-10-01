@@ -25,7 +25,7 @@ public class JwtService {
     }
 
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
+    public   <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
         //return hash map {"key"="value"}
         //map.get("key")
@@ -34,7 +34,7 @@ public class JwtService {
 
 
 
-      public  Claims extractAllClaims(String jwtToken) {
+      private   Claims extractAllClaims(String jwtToken) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSigningKey())

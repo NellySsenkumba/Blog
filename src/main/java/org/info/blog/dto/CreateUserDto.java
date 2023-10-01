@@ -10,7 +10,8 @@ public record CreateUserDto(
         String middleName,
         @NonNull Date dateOfBirth,
         @NonNull String email,
-        @NonNull String password
+        @NonNull String password,
+        @NonNull String role
 
 ) {
 }
